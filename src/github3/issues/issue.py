@@ -393,6 +393,20 @@ class _Issue(models.GitHubCore):
             self.title, self.body, assignee, "open", number, labels
         )
 
+    def timeline(self, number=-1):
+        """Iterate over timeline associated with this issue only.
+
+        :param int number:
+            (optional), number of events to return. Default: -1 returns all
+            events available.
+        :returns:
+            generator of events on this issue's timeline
+        :rtype:
+            :class:`~github3.issues.event.IssueEvent`
+        """
+        url = self._build_url("timeline", base_url=self._api)
+        return self._iter(int(number), url, event.IssueEvent)
+
     @requires_auth
     def unlock(self):
         """Unlock an issue.
